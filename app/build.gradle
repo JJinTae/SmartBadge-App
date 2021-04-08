@@ -2,6 +2,12 @@ plugins {
     id 'com.android.application'
 }
 
+// load keys
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def kakaoNativeAppKey = properties.getProperty('Kakao_Nativeapp_Key')
+
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -14,6 +20,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = ["KAKAO_NATIVEAPP_KEY":kakaoNativeAppKey]
+        buildConfigField "String", "KAKAO_NATIVEAPP_KEY", properties['Kakao_Nativeapp_Key']
+
     }
 
     buildTypes {
