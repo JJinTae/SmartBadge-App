@@ -21,9 +21,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders = ["KAKAO_NATIVEAPP_KEY":kakaoNativeAppKey]
+        // load keys
+        manifestPlaceholders = ["KAKAO_NATIVEAPP_KEY":kakaoNativeAppKey] // load keys for AndroidManifest.xml
         buildConfigField "String", "KAKAO_NATIVEAPP_KEY", properties['Kakao_Nativeapp_Key']
-
     }
 
     buildTypes {
@@ -49,4 +49,6 @@ dependencies {
 
     implementation "com.kakao.sdk:v2-user:2.4.2"
     implementation "com.kakao.sdk:v2-talk:2.4.2"
+
+    implementation "com.github.bumptech.glide:glide:4.11.0"
 }
