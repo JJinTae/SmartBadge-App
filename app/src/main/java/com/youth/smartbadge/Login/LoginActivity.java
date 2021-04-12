@@ -1,6 +1,8 @@
 package com.youth.smartbadge.Login;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.hardware.camera2.params.SessionConfiguration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,9 +12,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.user.UserApi;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.User;
 import com.youth.smartbadge.R;
+
+import java.text.DateFormat;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -22,8 +27,9 @@ import kotlin.jvm.functions.Function2;
 public class LoginActivity extends AppCompatActivity{
     private static final String TAG = "LoginActivity";
 
+
     private View loginButton, logoutButton;
-    private TextView nickName;
+    private TextView nickName, uid;
     private ImageView profileImage;
 
     @Override
@@ -81,7 +87,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private void updateKakaoLoginUi(){
 
-        // 사용자 정보 가져오기 .me()
+        // 사용자 정보 가져오기 .me() 호출 시 Access Token refresh
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
             @Override
             public Unit invoke(User user, Throwable throwable) {
@@ -91,8 +97,8 @@ public class LoginActivity extends AppCompatActivity{
                     Log.d(TAG, "invoke : nickname = " + user.getKakaoAccount().getProfile().getNickname());
 
 
-                    // nickName.setText(user.getKakaoAccount().getProfile().getNickname()); // get Nickname
-                    nickName.setText(Long.toString(user.getId())); // get UserID
+                    nickName.setText(user.getKakaoAccount().getProfile().getNickname()); // get Nickname
+                    uid.setText(Long.toString(user.getId())); // get UserID
                     Glide.with(profileImage).load(user.getKakaoAccount().getProfile().getThumbnailImageUrl()).circleCrop().into(profileImage);
 
 
@@ -100,6 +106,7 @@ public class LoginActivity extends AppCompatActivity{
                     logoutButton.setVisibility(View.VISIBLE);
                 } else{
                     nickName.setText(null);
+                    uid.setText(null);
                     profileImage.setImageBitmap(null);
 
                     loginButton.setVisibility(View.VISIBLE);
@@ -115,6 +122,7 @@ public class LoginActivity extends AppCompatActivity{
         loginButton = findViewById(R.id.login);
         logoutButton = findViewById(R.id.logout);
         nickName = findViewById(R.id.nickname);
+        uid = findViewById(R.id.uid);
         profileImage = findViewById(R.id.profile);
     }
 }
