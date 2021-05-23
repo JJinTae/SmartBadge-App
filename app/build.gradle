@@ -5,7 +5,12 @@ plugins {
 // load keys
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def kakaoNativeAppKey = properties.getProperty('Kakao_Nativeapp_Key')
+// At local.properties think about two of them
+// Kakao_Nativeapp_Key = "APP_KEY"  >  android:value="&quot;APP_KEY&quot;"
+// Kakao_Map_Key = APP_KEY  >  android:value="APP_KEY"
+def kakaoNativeAppKey = properties.getProperty('Kakao_Map_Key')
+
+
 
 
 android {
@@ -22,7 +27,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // load keys
-        manifestPlaceholders = ["KAKAO_NATIVEAPP_KEY":kakaoNativeAppKey] // load keys for AndroidManifest.xml
+        manifestPlaceholders = [KAKAO_NATIVEAPP_KEY:kakaoNativeAppKey] // load keys for AndroidManifest.xml
         buildConfigField "String", "KAKAO_NATIVEAPP_KEY", properties['Kakao_Nativeapp_Key']
     }
 
@@ -49,6 +54,7 @@ dependencies {
 
     implementation "com.kakao.sdk:v2-user:2.4.2"
     implementation "com.kakao.sdk:v2-talk:2.4.2"
+    implementation files('libs/libDaumMapAndroid.jar')
 
     implementation "com.github.bumptech.glide:glide:4.11.0"
 

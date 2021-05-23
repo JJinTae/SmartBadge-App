@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.kakao.sdk.auth.model.OAuthToken;
@@ -105,11 +106,14 @@ public class LoginActivity extends AppCompatActivity{
 
                         @Override
                         public void onFailure(Call<SmartBadge> call, Throwable t) {
+                            Log.d("TEST", "POST 실패");
                             t.printStackTrace();
                         }
                     });
                     finish();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                } else{
+                    Toast.makeText(LoginActivity.this, R.string.failed_start, Toast.LENGTH_SHORT).show();
                 }
             }
         });

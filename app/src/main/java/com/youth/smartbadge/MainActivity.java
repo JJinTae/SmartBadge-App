@@ -10,21 +10,18 @@ import android.view.View;
 
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.AccessTokenInfo;
-import com.kakao.sdk.user.model.User;
 import com.youth.smartbadge.Login.LoginActivity;
-import com.youth.smartbadge.Login.RetrofitAPI;
+import com.youth.smartbadge.Map.MapActivity;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private String userID;
-    private View logoutButton;
+    private View btnLogout, btnMap;
 
     private SharedPreferences appData;
 
@@ -71,8 +68,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, MapActivity.class));
+            }
+        });
+
         // 카카오톡 로그아웃 버튼
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
@@ -87,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void init(){
-        logoutButton = findViewById(R.id.btnLogout);
+        btnLogout = findViewById(R.id.btn_main_logout);
+        btnMap = findViewById(R.id.btn_main_map);
         appData = getSharedPreferences("appData", MODE_PRIVATE);
     }
 }

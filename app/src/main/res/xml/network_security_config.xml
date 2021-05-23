@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">112.158.50.42</domain>
         <domain includeSubdomains="true">112.158.50.42:9080</domain>
+        <domain includeSubdomains="true">maps.daum-img.net</domain>
     </domain-config>
 </network-security-config>
