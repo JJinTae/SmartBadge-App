@@ -32,25 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         init();
 
-//        GET 임시 저장
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://112.158.50.42:9080")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
-//        retrofitAPI.getData("1513441517").enqueue(new Callback<SmartBadge>() {
-//            @Override
-//            public void onResponse(Call<SmartBadge> call, Response<SmartBadge> response) {
-//                if(response.isSuccessful()){
-//                    Log.d("TEST", Integer.toString(response.body().getUserID()));
-//                }
-//            }
-//            @Override
-//            public void onFailure(Call<SmartBadge> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
-
         UserApiClient.getInstance().accessTokenInfo(new Function2<AccessTokenInfo, Throwable, Unit>() {
             @Override
             public Unit invoke(AccessTokenInfo accessTokenInfo, Throwable throwable) {

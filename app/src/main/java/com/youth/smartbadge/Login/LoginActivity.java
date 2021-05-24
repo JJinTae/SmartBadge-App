@@ -32,13 +32,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity{
     private static final String TAG = "LoginActivity";
 
+    private String BASE_URL = "http://112.158.50.42:9080";
+    private SharedPreferences appData;
+    private RetrofitAPI retrofitAPI;
+
     private View btnLogin;
     private Button btnStart;
     private ImageView imgProfile;
     private TextView tvNickname, tvUserId;
     private EditText edBadgeNum;
 
-    private SharedPreferences appData;
     private int smartBadgeId, userId;
 
     @Override
@@ -48,12 +51,6 @@ public class LoginActivity extends AppCompatActivity{
 
         init();
         updateKakaoLoginUi();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://112.158.50.42:9080")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
 
         // Function2 callback
         Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
@@ -161,5 +158,11 @@ public class LoginActivity extends AppCompatActivity{
         edBadgeNum = findViewById(R.id.ed_login_badgeNum);
 
         appData = getSharedPreferences("appData", MODE_PRIVATE);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        retrofitAPI = retrofit.create(RetrofitAPI.class);
     }
 }

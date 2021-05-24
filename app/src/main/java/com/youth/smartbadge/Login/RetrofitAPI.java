@@ -8,7 +8,10 @@ import retrofit2.http.Path;
 
 public interface RetrofitAPI {
     @GET("/users/{smartBadgeID}")
-    Call<SmartBadge> getData(@Path("smartBadgeID") String id);
+    Call<SmartBadge> getUserData(@Path("smartBadgeID") String id);
+
+    @GET("/location/{smartBadgeID}")
+    Call<SmartBadge> getLocationData(@Path("smartBadgeID") String id);
 
     @POST("/users/")
     Call<SmartBadge> postSignUp(@Body SmartBadge smartBadge);
