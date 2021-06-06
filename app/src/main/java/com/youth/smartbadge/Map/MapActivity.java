@@ -1,8 +1,16 @@
 package com.youth.smartbadge.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -32,12 +40,17 @@ public class MapActivity extends AppCompatActivity {
     private String updated_at;
     private float longitude;
     private float latitude;
+    private boolean nowSafeState;
+    private boolean preSafeState;
     private MapView mapView;
     private MapPoint mapPoint;
 
     private boolean shouldStopLoop;
     private Handler mHandler;
     private Runnable runnable;
+    private NotificationManager notificationManager;
+    private NotificationCompat.Builder builder;
+    private NotificationChannel channel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +71,7 @@ public class MapActivity extends AppCompatActivity {
                 }
             }
         };
-
+        mHandler.post(runnable);
     }
 
     public void PutMarkerOnMap(){
@@ -70,10 +83,17 @@ public class MapActivity extends AppCompatActivity {
                     Log.d("TEST", Integer.toString(response.body().getSmartBadgeID()));
                     Log.d("TEST", Float.toString(response.body().getLongitude()));
                     Log.d("TEST", Float.toString(response.body().getLatitude()));
+                    Log.d("TEST", Boolean.toString(response.body().getSafeState()));
                     longitude = response.body().getLongitude();
                     latitude = response.body().getLatitude();
+                    nowSafeState = response.body().getSafeState();
                     updated_at = response.body().getUpdate_at();
                     MapMarker("스마트 배지", updated_at, longitude, latitude);
+
+                    if(!change_valid(nowSafeState)){
+                        Notification notification = builder.build();
+                        notificationManager.notify(1, notification);
+                    }
                 }
             }
             @Override
@@ -100,10 +120,43 @@ public class MapActivity extends AppCompatActivity {
         mapView.addPOIItem( marker );
     }
 
+    public boolean change_valid(boolean nowState){
+        if(nowState == false && preSafeState == true){
+            preSafeState = false;
+            return false;
+        }
+        else if(nowState == false && preSafeState == false){
+            return true;
+        }
+        preSafeState = true;
+        return true;
+    }
+
+    public void setNotificationManager(){
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        builder = null;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            channel = new NotificationChannel("channel_01","MyChannel01", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+            builder = new NotificationCompat.Builder(this, "channel_01");
+        }
+        else{
+            builder = new NotificationCompat.Builder(this, null);
+        }
+        builder.setSmallIcon(R.drawable.child_marker_map);
+        builder.setContentTitle("어린이 스마트 배지 알림");
+        builder.setContentText("어린이가 안심지역을 이탈하였습니다. 알림을 눌러 확인하세요.");
+        builder.setAutoCancel(true);
+        Intent intent = new Intent(this, MapActivity.class);
+        builder.setContentIntent(PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+    }
+
     public void init(){
+        setNotificationManager();
+        preSafeState = false;
         mapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.view_main_map);
-        mapViewContainer.addView(mapView);
+         mapViewContainer.addView(mapView);
 
         appData = getSharedPreferences("appData", MODE_PRIVATE);
         smartBadgeID = Integer.toString(appData.getInt("smartBadgeID", 0));
@@ -116,22 +169,22 @@ public class MapActivity extends AppCompatActivity {
         retrofitAPI = retrofit.create(RetrofitAPI.class);
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        shouldStopLoop = false;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        shouldStopLoop = true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        shouldStopLoop = false;
-        mHandler.post(runnable);
-    }
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//        shouldStopLoop = false;
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        shouldStopLoop = true;
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        shouldStopLoop = false;
+//        mHandler.post(runnable);
+//    }
 }

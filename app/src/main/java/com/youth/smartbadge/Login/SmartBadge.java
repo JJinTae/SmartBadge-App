@@ -13,6 +13,10 @@ public class SmartBadge {
     private float longitude;
     @SerializedName("latitude")
     private float latitude;
+    @SerializedName("safeState")
+    private boolean safeState;
+    @SerializedName("makeState")
+    private boolean makeState;
     @SerializedName("updated_at")
     private String updated_at;
 
@@ -25,10 +29,12 @@ public class SmartBadge {
     }
 
     // GET locationData
-    public SmartBadge(int smartBadgeID, float longitude, float latitude, String updated_at){
+    public SmartBadge(int smartBadgeID, float longitude, float latitude, boolean safeState, boolean makeState, String updated_at){
         this.smartBadgeID = smartBadgeID;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.safeState = safeState;
+        this.makeState = makeState;
         this.updated_at = updated_at;
     }
 
@@ -49,8 +55,8 @@ public class SmartBadge {
 
     public float getLongitude() { return longitude; }
     public float getLatitude() { return latitude; }
+    public boolean getSafeState() { return safeState; }
+    public boolean getMakeState() { return makeState; }
     public String getUpdate_at() { return updated_at; }
-
-
 
 }
