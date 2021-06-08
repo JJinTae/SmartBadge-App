@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,23 +8,18 @@
     tools:context=".Map.MapActivity">
 
     <LinearLayout
-        android:id="@+id/view_map_main"
+        android:id="@+id/view_setting_main"
         android:layout_width="match_parent"
         android:layout_height="600dp"
         android:orientation="vertical">
 
     </LinearLayout>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_setting_make_zone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn_map_safe_zone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="안심 지역 관리" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="안심지역 자동 생성"
+        android:visibility="gone"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

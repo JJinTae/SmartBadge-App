@@ -23,6 +23,12 @@
         android:text="아이 위치 보기" />
 
     <Button
+        android:id="@+id/btn_main_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="상황별 음성 녹음" />
+
+    <Button
         android:id="@+id/btn_main_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

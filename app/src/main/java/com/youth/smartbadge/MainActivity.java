@@ -7,11 +7,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.AccessTokenInfo;
 import com.youth.smartbadge.Login.LoginActivity;
 import com.youth.smartbadge.Map.MapActivity;
+import com.youth.smartbadge.Record.RecordActivity;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String userID;
     private View btnLogout, btnMap;
+    private Button btnRecord;
 
     private SharedPreferences appData;
 
@@ -56,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, RecordActivity.class));
+            }
+        });
+
         // 카카오톡 로그아웃 버튼
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void init(){
+        btnRecord = findViewById(R.id.btn_main_record);
         btnLogout = findViewById(R.id.btn_main_logout);
         btnMap = findViewById(R.id.btn_main_map);
         appData = getSharedPreferences("appData", MODE_PRIVATE);

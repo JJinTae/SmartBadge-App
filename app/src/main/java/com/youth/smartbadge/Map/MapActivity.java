@@ -14,10 +14,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
+import com.youth.smartbadge.Login.LoginActivity;
 import com.youth.smartbadge.Login.RetrofitAPI;
 import com.youth.smartbadge.Login.SmartBadge;
+import com.youth.smartbadge.MainActivity;
 import com.youth.smartbadge.R;
 
 import net.daum.mf.map.api.MapPOIItem;
@@ -42,8 +47,11 @@ public class MapActivity extends AppCompatActivity {
     private float latitude;
     private boolean nowSafeState;
     private boolean preSafeState;
+    private boolean makeState;
     private MapView mapView;
     private MapPoint mapPoint;
+    private Button btnSetting;
+    private ViewGroup mapViewContainer;
 
     private boolean shouldStopLoop;
     private Handler mHandler;
@@ -72,6 +80,16 @@ public class MapActivity extends AppCompatActivity {
             }
         };
         mHandler.post(runnable);
+
+        btnSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(MapActivity.this, SettingActivity.class);
+                intent.putExtra("makeState", makeState);
+                startActivity(intent);
+            }
+        });
     }
 
     public void PutMarkerOnMap(){
@@ -84,9 +102,11 @@ public class MapActivity extends AppCompatActivity {
                     Log.d("TEST", Float.toString(response.body().getLongitude()));
                     Log.d("TEST", Float.toString(response.body().getLatitude()));
                     Log.d("TEST", Boolean.toString(response.body().getSafeState()));
+                    Log.d("TEST make", Boolean.toString(response.body().getMakeState()));
                     longitude = response.body().getLongitude();
                     latitude = response.body().getLatitude();
                     nowSafeState = response.body().getSafeState();
+                    makeState = response.body().getMakeState();
                     updated_at = response.body().getUpdate_at();
                     MapMarker("스마트 배지", updated_at, longitude, latitude);
 
@@ -154,9 +174,10 @@ public class MapActivity extends AppCompatActivity {
     public void init(){
         setNotificationManager();
         preSafeState = false;
+        btnSetting = findViewById(R.id.btn_map_safe_zone);
         mapView = new MapView(this);
-        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.view_main_map);
-         mapViewContainer.addView(mapView);
+        mapViewContainer = (ViewGroup) findViewById(R.id.view_map_main);
+        mapViewContainer.addView(mapView);
 
         appData = getSharedPreferences("appData", MODE_PRIVATE);
         smartBadgeID = Integer.toString(appData.getInt("smartBadgeID", 0));
@@ -169,6 +190,12 @@ public class MapActivity extends AppCompatActivity {
         retrofitAPI = retrofit.create(RetrofitAPI.class);
     }
 
+
+    @Override
+    public void finish(){
+        mapViewContainer.removeView(mapView);
+        super.finish();
+    }
 //    @Override
 //    protected void onRestart() {
 //        super.onRestart();

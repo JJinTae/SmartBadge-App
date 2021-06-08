@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    tools:context=".Record.RecordActivity">
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/textView_roadway"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:text="차도일 때"
+            android:textSize="25dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="10dp"
+
+
+            />
+
+        <Button
+            android:id="@+id/record_roadway"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="녹음하기"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"/>
+
+        <Button
+            android:id="@+id/recordStop_roadway"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="녹음중지"
+            android:visibility="gone"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"/>
+
+        <Button
+            android:id="@+id/play_roadway"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:layout_alignParentTop="true"
+            android:text="재생"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:id="@+id/textView_sidewalk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:text="인도일 때"
+            android:textSize="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:id="@+id/record_sidewalk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="녹음하기"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:id="@+id/recordStop_sidewalk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="녹음중지"
+            android:visibility="gone"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:id="@+id/play_sidewalk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:layout_alignParentTop="true"
+            android:text="재생"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:id="@+id/textView_crosswalk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:text="횡단보도일 때"
+            android:textSize="21dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:id="@+id/record_crosswalk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="녹음하기"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:id="@+id/recordStop_crosswalk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_alignParentBottom="true"
+            android:text="녹음중지"
+            android:visibility="gone"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:id="@+id/play_crosswalk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="2"
+            android:text="재생"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp" />
+    </GridLayout>
+</LinearLayout>

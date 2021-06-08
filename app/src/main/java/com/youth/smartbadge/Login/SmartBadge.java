@@ -22,10 +22,15 @@ public class SmartBadge {
 
     public SmartBadge(){}
 
-    // GET userData
+    // POST userData
     public SmartBadge(int smartBadgeID, int userID){
         this.smartBadgeID = smartBadgeID;
         this.userID = userID;
+    }
+
+    public SmartBadge(int smartBadgeID, boolean makeState){
+        this.smartBadgeID = smartBadgeID;
+        this.makeState = makeState;
     }
 
     // GET locationData
