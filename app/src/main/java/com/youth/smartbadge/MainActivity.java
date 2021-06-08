@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     Log.d("MainTest", "사용자 정보가 없습니다.");
-                    finish();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+//                    finish();
+//                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
                 return null;
             }

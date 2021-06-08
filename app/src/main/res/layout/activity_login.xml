@@ -54,14 +54,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/kakao_login_medium_wide"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btn_login_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="시 작 하 기"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

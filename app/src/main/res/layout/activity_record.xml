@@ -5,179 +5,148 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center_vertical"
-    tools:context=".Record.RecordActivity">
 
+    tools:context=".Record.RecordActivity"
+    android:background="@color/mainColor">
 
-    <GridLayout
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="300px"
+        android:background="@drawable/recordmain" />
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="600px"
+        android:background="@drawable/recordtext" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp">
 
-        <TextView
+        <ImageView
             android:id="@+id/textView_roadway"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="400px"
+            android:layout_height="150px"
+            android:background="@drawable/roadtext"
             android:layout_row="0"
             android:layout_column="0"
-            android:text="차도일 때"
-            android:textSize="25dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="10dp"
-
 
             />
 
         <Button
             android:id="@+id/record_roadway"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300px"
+            android:layout_height="150px"
             android:layout_row="0"
             android:layout_column="1"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="녹음하기"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"/>
+            android:background="@drawable/recordbtn"
+            android:text=" " />
 
         <Button
             android:id="@+id/recordStop_roadway"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300px"
+            android:layout_height="150px"
+            android:background="@drawable/recordstop"
             android:layout_row="0"
             android:layout_column="1"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="녹음중지"
+            android:text=" "
             android:visibility="gone"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"/>
+            />
 
         <Button
             android:id="@+id/play_roadway"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="250px"
+            android:layout_height="150px"
             android:layout_row="0"
             android:layout_column="2"
             android:layout_alignParentTop="true"
-            android:text="재생"
-            android:layout_marginTop="200dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp" />
-
-        <TextView
-            android:id="@+id/textView_sidewalk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:text="인도일 때"
-            android:textSize="25dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="10dp" />
-
-        <Button
-            android:id="@+id/record_sidewalk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="녹음하기"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp" />
+            android:background="@drawable/musicstart"
+            android:text=" " />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/recordStop_sidewalk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="녹음중지"
-            android:visibility="gone"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp" />
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="80px"
+        android:background="@drawable/exroad" />
 
-        <Button
-            android:id="@+id/play_sidewalk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="1"
-            android:layout_column="2"
-            android:layout_alignParentTop="true"
-            android:text="재생"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp">
 
-        <TextView
+        <ImageView
             android:id="@+id/textView_crosswalk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/crosstext"
+            android:layout_width="400px"
+            android:layout_height="150px"
             android:layout_row="2"
             android:layout_column="0"
-            android:text="횡단보도일 때"
-            android:textSize="21dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginLeft="10dp" />
 
         <Button
             android:id="@+id/record_crosswalk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300px"
+            android:layout_height="150px"
+            android:background="@drawable/recordbtn"
             android:layout_row="2"
             android:layout_column="1"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="녹음하기"
+            android:text=" "
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginBottom="10dp" />
 
         <Button
             android:id="@+id/recordStop_crosswalk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300px"
+            android:layout_height="150px"
+            android:background="@drawable/recordstop"
             android:layout_row="2"
             android:layout_column="1"
             android:layout_alignParentBottom="true"
-            android:text="녹음중지"
+            android:text=" "
             android:visibility="gone"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginBottom="10dp" />
 
         <Button
             android:id="@+id/play_crosswalk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="250px"
+            android:layout_height="150px"
+            android:background="@drawable/musicstart"
             android:layout_row="2"
             android:layout_column="2"
-            android:text="재생"
+            android:text=" "
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp" />
-    </GridLayout>
+            android:layout_marginLeft="20dp" />
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="80px"
+        android:background="@drawable/excross" />
 </LinearLayout>

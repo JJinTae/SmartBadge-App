@@ -20,16 +20,13 @@ public class RecordActivity extends AppCompatActivity {
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private MediaRecorder recorder;
-    private String fileName_roadway, fileName_crosswalk, fileName_sidewalk;
+    private String fileName_roadway, fileName_crosswalk;
 
     private MediaPlayer player;
     private int position = 0; //다시 시작 기능을 위한 현재 재생 위치 확인 변수
     private Button btnRecord_roadway;
     private Button btnStopRecording_roadway;
     private Button btnPlay_roadway;
-    private Button btnRecord_sidewalk;
-    private Button btnStopRecording_sidewalk;
-    private Button btnPlay_sidewalk;
     private Button btnRecord_crosswalk;
     private Button btnStopRecording_crosswalk;
     private Button btnPlay_crosswalk;
@@ -70,35 +67,7 @@ public class RecordActivity extends AppCompatActivity {
             }
         });
 
-        //sidewalk 인도일 때 버튼 이벤트
-        //인도 녹음
-        btnRecord_sidewalk.setOnClickListener (new View.OnClickListener ( ) {
-            @Override
-            public void onClick(View v) {
-                btnRecord_sidewalk.setVisibility (View.GONE);
-                btnStopRecording_sidewalk.setVisibility (View.VISIBLE);
-                recordAudio (fileName_sidewalk);
-            }
-        });
 
-        //인도 녹음 중지
-        btnStopRecording_sidewalk.setOnClickListener (new View.OnClickListener ( ) {
-            @Override
-            public void onClick(View v) {
-
-                btnRecord_sidewalk.setVisibility (View.VISIBLE);
-                btnStopRecording_sidewalk.setVisibility (View.GONE);
-                stopRecording ( );
-            }
-        });
-
-        //인도 녹음 재생
-        btnPlay_sidewalk.setOnClickListener (new View.OnClickListener ( ) {
-            @Override
-            public void onClick(View v) {
-                playAudio (fileName_sidewalk);
-            }
-        });
 
         //crosswalk 횡단보도일 때 버튼 이벤트
         //횡단보도 녹음
@@ -186,9 +155,7 @@ public class RecordActivity extends AppCompatActivity {
         btnRecord_roadway = findViewById (R.id.record_roadway);
         btnStopRecording_roadway = findViewById (R.id.recordStop_roadway);
         btnPlay_roadway = findViewById (R.id.play_roadway);
-        btnRecord_sidewalk = findViewById (R.id.record_sidewalk);
-        btnStopRecording_sidewalk = findViewById (R.id.recordStop_sidewalk);
-        btnPlay_sidewalk = findViewById (R.id.play_sidewalk);
+
         btnRecord_crosswalk = findViewById (R.id.record_crosswalk);
         btnStopRecording_crosswalk = findViewById (R.id.recordStop_crosswalk);
         btnPlay_crosswalk = findViewById (R.id.play_crosswalk);
@@ -197,7 +164,7 @@ public class RecordActivity extends AppCompatActivity {
         int permissionCheck = ContextCompat.checkSelfPermission (this, Manifest.permission.RECORD_AUDIO);
 
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText (this, "Audio 권한 있음.", Toast.LENGTH_LONG).show ( );
+//            Toast.makeText (this, "Audio 권한 있음.", Toast.LENGTH_LONG).show ( );
         } else {
             Toast.makeText (this, "Audio 권한 없음", Toast.LENGTH_LONG).show ( );
             if (ActivityCompat.shouldShowRequestPermissionRationale (this, Manifest.permission.RECORD_AUDIO)) {
@@ -211,6 +178,6 @@ public class RecordActivity extends AppCompatActivity {
         Log.e ("MainActivity", "저장할 파일 명 : " + fileName);
         fileName_roadway =fileName+ "/audiorecordtest_roadway.mp3";
         fileName_crosswalk =fileName+ "/audiorecordtest_crosswalk.mp3";
-        fileName_sidewalk =fileName+ "/audiorecordtest_sidewalk.mp3";
+
     }
 }
