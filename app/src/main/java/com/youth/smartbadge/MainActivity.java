@@ -248,4 +248,11 @@ public class MainActivity extends AppCompatActivity {
         mapViewContainer.removeView(mapView);
         super.finish();
     }
+
+    @Override
+    protected void onPause() {
+        mapViewContainer.removeView(mapView);
+        super.onPause();
+    }
+
 }
