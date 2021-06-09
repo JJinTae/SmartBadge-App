@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             PutMarkerOnMap();
                             if (!shouldStopLoop) {
-                                mHandler.postDelayed(this, 5000);
+                                mHandler.postDelayed(this, 3000);
                             }
                         }
                     };
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+//                finish();
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 intent.putExtra("makeState", makeState);
                 startActivity(intent);
@@ -224,9 +224,9 @@ public class MainActivity extends AppCompatActivity {
     public void init(){
         setNotificationManager();
         preSafeState = false;
-        mapView = new MapView(this);
+        // mapView = new MapView(this);
         mapViewContainer = (ViewGroup) findViewById(R.id.view_map_main);
-        mapViewContainer.addView(mapView);
+        // mapViewContainer.addView(mapView);
 
         btnRecord = findViewById(R.id.btn_main_record);
         btnLogout = findViewById(R.id.btn_main_logout);
@@ -255,4 +255,10 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onResume() {
+        mapView = new MapView(this);
+        mapViewContainer.addView(mapView);
+        super.onResume();
+    }
 }

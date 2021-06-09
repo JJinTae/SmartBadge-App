@@ -19,6 +19,8 @@ public class SmartBadge {
     private boolean makeState;
     @SerializedName("updated_at")
     private String updated_at;
+    @SerializedName("makeNewZoneState")
+    private boolean makeNewZoneState;
 
     public SmartBadge(){}
 
@@ -28,9 +30,10 @@ public class SmartBadge {
         this.userID = userID;
     }
 
-    public SmartBadge(int smartBadgeID, boolean makeState){
+    public SmartBadge(int smartBadgeID, boolean makeState, boolean makeNewZoneState){
         this.smartBadgeID = smartBadgeID;
         this.makeState = makeState;
+        this.makeNewZoneState = makeNewZoneState;
     }
 
     // GET locationData

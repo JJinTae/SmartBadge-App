@@ -1,5 +1,6 @@
 package com.youth.smartbadge.Map;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Notification;
@@ -37,11 +38,13 @@ public class SettingActivity extends AppCompatActivity {
     private String smartBadgeID;
     private boolean makeState;
 
-    private Button btnMakeZone;
+    private Button btnMakeZone, btnDeleteZone, btnMakeNewZone, btnDeleteNewZone;
 
+    private ViewGroup mapViewContainer;
     private MapPoint mapPoint;
     private MapView mapView;
     private MapPolyline safeZone;
+    private MapPolyline newRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class SettingActivity extends AppCompatActivity {
 
         if (makeState){
             PutSafeZoneOnMap();
+            PutNewRouteOnMap();
         }
         else{
             btnMakeZone.setVisibility(View.VISIBLE);
@@ -60,20 +64,25 @@ public class SettingActivity extends AppCompatActivity {
         btnMakeZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SmartBadge smartBadge = new SmartBadge(Integer.parseInt(smartBadgeID), true);
-                retrofitAPI.putMakeState(smartBadgeID, smartBadge).enqueue(new Callback<SmartBadge>() {
-                    @Override
-                    public void onResponse(Call<SmartBadge> call, Response<SmartBadge> response) {
-                        if(response.isSuccessful()){
-                            Log.d("test", Boolean.toString(response.body().getMakeState()));
-                            btnMakeZone.setVisibility(View.GONE);
-                        }
-                    }
-                    @Override
-                    public void onFailure(Call<SmartBadge> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+                MakeZone();
+            }
+        });
+        btnDeleteZone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DeleteGpsRoute();
+            }
+        });
+        btnMakeNewZone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MakeNewZone();
+            }
+        });
+        btnDeleteNewZone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DeleteNewRoute();
             }
         });
     }
@@ -83,7 +92,10 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<SmartBadge>> call, Response<List<SmartBadge>> response) {
                 if(response.isSuccessful()){
-                    mapView.removeAllPOIItems();
+                    safeZone = new MapPolyline();
+                    safeZone.setTag(1000);
+                    safeZone.setLineColor(Color.argb(128, 7, 248, 90));
+
                     List<SmartBadge> data = response.body();
                     Log.d("settingTest", "success");
 
@@ -113,6 +125,120 @@ public class SettingActivity extends AppCompatActivity {
     }
 
 
+    public void PutNewRouteOnMap(){
+        retrofitAPI.getNewRouteData(smartBadgeID).enqueue(new Callback<List<SmartBadge>>() {
+            @Override
+            public void onResponse(Call<List<SmartBadge>> call, Response<List<SmartBadge>> response) {
+                if (response.isSuccessful()){
+                    List<SmartBadge> data = response.body();
+                    Log.d("settingTest", "success");
+                    newRoute = new MapPolyline();
+                    newRoute.setTag(1001);
+                    newRoute.setLineColor(Color.argb(128, 237, 28, 36));
+
+                    if (data.size() > 0){
+                        for (int i=0; i<data.size(); i++){
+                            float latitude =  data.get(i).getLatitude();
+                            float longitude = data.get(i).getLongitude();
+                            newRoute.addPoint(MapPoint.mapPointWithGeoCoord(latitude, longitude));
+                        }
+                        btnMakeNewZone.setVisibility(View.VISIBLE);
+                        btnDeleteNewZone.setVisibility(View.VISIBLE);
+
+                        mapView.addPolyline(newRoute);
+                    }
+                    else {
+                        btnMakeNewZone.setVisibility(View.GONE);
+                        btnDeleteNewZone.setVisibility(View.GONE);
+                        btnDeleteZone.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<SmartBadge>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void DeleteNewRoute(){
+        retrofitAPI.deleteNewRouteData(smartBadgeID).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()){
+                    Log.d("settingTest", "Delete New Route");
+                    btnMakeNewZone.setVisibility(View.GONE);
+                    btnDeleteNewZone.setVisibility(View.GONE);
+                    mapView.removePolyline(newRoute);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+    public void MakeNewZone(){
+        SmartBadge smartBadge = new SmartBadge(Integer.parseInt(smartBadgeID), true, true);
+        retrofitAPI.putMakeState(smartBadgeID, smartBadge).enqueue(new Callback<SmartBadge>() {
+            @Override
+            public void onResponse(Call<SmartBadge> call, Response<SmartBadge> response) {
+                if(response.isSuccessful()){
+                    Log.d("test", "make New zone success");
+                    btnMakeNewZone.setVisibility(View.GONE);
+                    btnDeleteNewZone.setVisibility(View.GONE);
+                    DeleteNewRoute();
+                    mapView.removePolyline(newRoute);
+                    mapView.removePolyline(safeZone);
+                    PutSafeZoneOnMap();
+                }
+            }
+            @Override
+            public void onFailure(Call<SmartBadge> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void DeleteGpsRoute(){
+        retrofitAPI.deleteGpsRouteData(smartBadgeID).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()){
+                    Log.d("settingTest", "Delete Gps Route");
+                    mapView.removePolyline(safeZone);
+                    PutSafeZoneOnMap();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void MakeZone(){
+        SmartBadge smartBadge = new SmartBadge(Integer.parseInt(smartBadgeID), true, false);
+        retrofitAPI.putMakeState(smartBadgeID, smartBadge).enqueue(new Callback<SmartBadge>() {
+            @Override
+            public void onResponse(Call<SmartBadge> call, Response<SmartBadge> response) {
+                if(response.isSuccessful()){
+                    Log.d("test", Boolean.toString(response.body().getMakeState()));
+                    PutSafeZoneOnMap();
+                    btnMakeZone.setVisibility(View.GONE);
+                }
+            }
+            @Override
+            public void onFailure(Call<SmartBadge> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+
     public void MapMarker(String MakerName, String detail, float startX, float startY) {
         mapPoint = MapPoint.mapPointWithGeoCoord( startY, startX );
         mapView.setMapCenterPointAndZoomLevel( mapPoint, 1, true);
@@ -133,18 +259,21 @@ public class SettingActivity extends AppCompatActivity {
 
     public void init(){
         btnMakeZone = findViewById(R.id.btn_setting_make_zone);
-        mapView = new MapView(this);
-        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.view_setting_main);
-        mapViewContainer.addView(mapView);
+        btnDeleteZone = findViewById(R.id.btn_setting_delete_zone);
+        btnMakeNewZone = findViewById(R.id.btn_setting_make_new_zone);
+        btnDeleteNewZone = findViewById(R.id.btn_setting_delete_new_zone);
+        // mapView = new MapView(this);
+        mapViewContainer = (ViewGroup) findViewById(R.id.view_setting_main);
+        // mapViewContainer.addView(mapView);
 
-        safeZone = new MapPolyline();
-        safeZone.setTag(1000);
-        safeZone.setLineColor(Color.argb(128, 7, 248, 90));
+
+
 
 
         appData = getSharedPreferences("appData", MODE_PRIVATE);
         smartBadgeID = Integer.toString(appData.getInt("smartBadgeID", 0));
         Log.d("InitTest", smartBadgeID);
+
 
         Intent settingIntent = getIntent();
         makeState = settingIntent.getBooleanExtra("makeState", false);
@@ -155,5 +284,24 @@ public class SettingActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         retrofitAPI = retrofit.create(RetrofitAPI.class);
+    }
+
+    @Override
+    public void finish(){
+        mapViewContainer.removeView(mapView);
+        super.finish();
+    }
+
+    @Override
+    protected void onPause() {
+        mapViewContainer.removeView(mapView);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        mapView = new MapView(this);
+        mapViewContainer.addView(mapView);
+        super.onResume();
     }
 }

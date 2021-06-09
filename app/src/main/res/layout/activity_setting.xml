@@ -20,6 +20,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="안심지역 자동 생성"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btn_setting_make_new_zone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="안심지역 추가"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btn_setting_delete_new_zone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="이탈 경로 삭제"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btn_setting_delete_zone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="안심지역 수정"
+        android:visibility="gone" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
