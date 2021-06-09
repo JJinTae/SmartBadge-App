@@ -5,8 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Login.LoginActivity" >
-
+    tools:context=".Login.LoginActivity"
+    android:background="@color/mainColor">
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="250px"
+        android:background="@drawable/maintext" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -54,14 +59,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/kakao_login_medium_wide"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_login_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:text="시 작 하 기"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>
