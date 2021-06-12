@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -14,9 +15,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.youth.smartbadge.Login.RetrofitAPI;
 import com.youth.smartbadge.R;
 
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class RecordActivity extends AppCompatActivity {
+
+    private String BASE_URL = "http://112.158.50.42:9080";
+    private SharedPreferences appData;
+    private DataCommAPI dataCommAPI;
+    private String smartBadgeID;
+    private String checkedFileName;
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private MediaRecorder recorder;
@@ -43,6 +62,7 @@ public class RecordActivity extends AppCompatActivity {
         btnRecord_roadway.setOnClickListener (new View.OnClickListener ( ) {
             @Override
             public void onClick(View v) {
+                checkedFileName = "roadway";
                 btnRecord_roadway.setVisibility (View.GONE);
                 btnStopRecording_roadway.setVisibility (View.VISIBLE);
                 recordAudio (fileName_roadway);
@@ -74,6 +94,7 @@ public class RecordActivity extends AppCompatActivity {
         btnRecord_crosswalk.setOnClickListener (new View.OnClickListener ( ) {
             @Override
             public void onClick(View v) {
+                checkedFileName = "crosswalk";
                 btnRecord_crosswalk.setVisibility (View.GONE);
                 btnStopRecording_crosswalk.setVisibility (View.VISIBLE);
                 recordAudio (fileName_crosswalk);
@@ -126,6 +147,17 @@ public class RecordActivity extends AppCompatActivity {
             recorder=null;
 
             Toast.makeText (this,"녹음중지", Toast.LENGTH_SHORT).show ();
+
+            if (checkedFileName == "roadway"){
+                uploadRoadWayAudio( fileName_roadway, checkedFileName);
+            }
+            else if(checkedFileName == "crosswalk"){
+                uploadCrossWalkAudio(fileName_crosswalk, checkedFileName);
+            }
+
+
+
+
         }
     }
 
@@ -149,6 +181,50 @@ public class RecordActivity extends AppCompatActivity {
             player.release ();
             player=null;
         }
+    }
+
+    private void uploadRoadWayAudio(String sourceFile, String title){
+        File file = new File(sourceFile);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("voiceFile", file.getName(), requestFile);
+        RequestBody descBody = RequestBody.create(MediaType.parse("text/plain"), title);
+
+        Call<Record> call = dataCommAPI.uploadRoadWayFile(descBody, body);
+        call.enqueue(new Callback<Record>() {
+            @Override
+            public void onResponse(Call<Record> call, Response<Record> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "차도 음성 파일 업로드 성공", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Record> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void uploadCrossWalkAudio(String sourceFile, String title){
+        File file = new File(sourceFile);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("voiceFile", file.getName(), requestFile);
+        RequestBody descBody = RequestBody.create(MediaType.parse("text/plain"), title);
+
+        Call<Record> call = dataCommAPI.uploadCrossWalkFile(descBody, body);
+        call.enqueue(new Callback<Record>() {
+            @Override
+            public void onResponse(Call<Record> call, Response<Record> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "횡단보도 음성 파일 업로드 성공", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Record> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     public void init(){
@@ -179,5 +255,15 @@ public class RecordActivity extends AppCompatActivity {
         fileName_roadway =fileName+ "/audiorecordtest_roadway.mp3";
         fileName_crosswalk =fileName+ "/audiorecordtest_crosswalk.mp3";
 
+        // For Server
+        appData = getSharedPreferences("appData", MODE_PRIVATE);
+        smartBadgeID = Integer.toString(appData.getInt("smartBadgeID", 0));
+        Log.d("InitTest", smartBadgeID);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        dataCommAPI = retrofit.create(DataCommAPI.class);
     }
 }
