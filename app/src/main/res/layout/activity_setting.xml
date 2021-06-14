@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/mainColor"
     tools:context=".Map.MapActivity">
 
     <LinearLayout
@@ -20,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="안심지역 자동 생성"
+        android:background="@drawable/thema_white_btn"
         android:visibility="gone" />
 
     <Button
@@ -27,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="안심지역 추가"
+        android:background="@drawable/thema_white_btn"
         android:visibility="gone" />
 
     <Button
@@ -34,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="이탈 경로 삭제"
+        android:background="@drawable/thema_white_btn"
         android:visibility="gone" />
 
     <Button
@@ -41,6 +45,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="안심지역 수정"
+        android:background="@drawable/thema_white_btn"
         android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btn_setting_draw_jaywalking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/thema_white_btn"
+        android:text="무단횡단 기록 열람" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

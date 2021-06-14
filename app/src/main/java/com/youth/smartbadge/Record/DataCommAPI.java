@@ -22,11 +22,13 @@ public interface DataCommAPI {
     @PUT("/voice-uploads/8/")
     Call<Record> uploadRoadWayFile(@Part("title") RequestBody title,
                                   @Part MultipartBody.Part voiceFile);
-
-
     @Multipart
     @PUT("/voice-uploads/9/")
     Call<Record> uploadCrossWalkFile(@Part("title") RequestBody title,
+                                     @Part MultipartBody.Part voiceFile);
+    @Multipart
+    @PUT("/voice-uploads/10/")
+    Call<Record> uploadJayWalkingFile(@Part("title") RequestBody title,
                                      @Part MultipartBody.Part voiceFile);
 
 }

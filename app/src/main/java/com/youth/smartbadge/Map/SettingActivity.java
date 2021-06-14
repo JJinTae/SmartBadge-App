@@ -38,7 +38,7 @@ public class SettingActivity extends AppCompatActivity {
     private String smartBadgeID;
     private boolean makeState;
 
-    private Button btnMakeZone, btnDeleteZone, btnMakeNewZone, btnDeleteNewZone;
+    private Button btnMakeZone, btnDeleteZone, btnMakeNewZone, btnDeleteNewZone, btnDrawJaywalking;
 
     private ViewGroup mapViewContainer;
     private MapPoint mapPoint;
@@ -83,6 +83,39 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DeleteNewRoute();
+            }
+        });
+        btnDrawJaywalking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PutJaywalkingOnMap();
+            }
+        });
+
+    }
+
+    public void PutJaywalkingOnMap(){
+        retrofitAPI.getJaywalkingData(smartBadgeID).enqueue(new Callback<List<SmartBadge>>() {
+            @Override
+            public void onResponse(Call<List<SmartBadge>> call, Response<List<SmartBadge>> response) {
+                if (response.isSuccessful()){
+                    List<SmartBadge> data = response.body();
+                    Log.d("jaywalking on map", "success");
+
+                    if (data.size() > 0){
+                        for (int i=0; i<data.size(); i++){
+                            String updated_at = data.get(i).getUpdate_at();
+                            float latitude =  data.get(i).getLatitude();
+                            float longitude = data.get(i).getLongitude();
+                            MapMarker("무단 횡단 : ", updated_at, longitude, latitude);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<SmartBadge>> call, Throwable t) {
+                t.printStackTrace();
             }
         });
     }
@@ -248,11 +281,9 @@ public class SettingActivity extends AppCompatActivity {
         // 마커 클릭 시 컨테이너에 담길 내용
         marker.setMapPoint( mapPoint );
         // 마커 기본 이미지
-        marker.setCustomImageResourceId(R.drawable.child_marker_map);
-        marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+        marker.setMarkerType(MapPOIItem.MarkerType.RedPin);
         // 마커 클릭시 이미지
-        marker.setCustomSelectedImageResourceId(R.drawable.child_marker_map);
-        marker.setSelectedMarkerType( MapPOIItem.MarkerType.CustomImage );
+        marker.setSelectedMarkerType( MapPOIItem.MarkerType.BluePin);
         mapView.addPOIItem( marker );
     }
 
@@ -262,6 +293,7 @@ public class SettingActivity extends AppCompatActivity {
         btnDeleteZone = findViewById(R.id.btn_setting_delete_zone);
         btnMakeNewZone = findViewById(R.id.btn_setting_make_new_zone);
         btnDeleteNewZone = findViewById(R.id.btn_setting_delete_new_zone);
+        btnDrawJaywalking = findViewById(R.id.btn_setting_draw_jaywalking);
         // mapView = new MapView(this);
         mapViewContainer = (ViewGroup) findViewById(R.id.view_setting_main);
         // mapViewContainer.addView(mapView);

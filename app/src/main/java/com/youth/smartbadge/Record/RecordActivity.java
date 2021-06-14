@@ -39,7 +39,7 @@ public class RecordActivity extends AppCompatActivity {
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private MediaRecorder recorder;
-    private String fileName_roadway, fileName_crosswalk;
+    private String fileName_roadway, fileName_crosswalk, fileName_jaywalking;
 
     private MediaPlayer player;
     private int position = 0; //다시 시작 기능을 위한 현재 재생 위치 확인 변수
@@ -49,6 +49,9 @@ public class RecordActivity extends AppCompatActivity {
     private Button btnRecord_crosswalk;
     private Button btnStopRecording_crosswalk;
     private Button btnPlay_crosswalk;
+    private Button btnRecord_jaywalking;
+    private Button btnStopRecording_jaywalking;
+    private Button btnPlay_jaywalking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,9 +122,38 @@ public class RecordActivity extends AppCompatActivity {
                 playAudio (fileName_crosswalk);
             }
         });
+
+        //jaywalking  무단횡단일 때 버튼 이벤트
+        //무단횡단 녹음
+        btnRecord_jaywalking.setOnClickListener (new View.OnClickListener ( ) {
+            @Override
+            public void onClick(View v) {
+                checkedFileName = "jaywalking";
+                btnRecord_jaywalking.setVisibility (View.GONE);
+                btnStopRecording_jaywalking.setVisibility (View.VISIBLE);
+                recordAudio (fileName_jaywalking);
+            }
+        });
+
+        //무단횡단 녹음정지
+        btnStopRecording_jaywalking.setOnClickListener (new View.OnClickListener ( ) {
+            @Override
+            public void onClick(View v) {
+                btnRecord_jaywalking.setVisibility (View.VISIBLE);
+                btnStopRecording_jaywalking.setVisibility (View.GONE);
+                stopRecording ( );
+
+            }
+        });
+
+        //무단횡단 녹음 재생
+        btnPlay_jaywalking.setOnClickListener (new View.OnClickListener ( ) {
+            @Override
+            public void onClick(View v) {
+                playAudio (fileName_jaywalking);
+            }
+        });
     }
-
-
 
 
     public void recordAudio(String fileName) {
@@ -154,10 +186,9 @@ public class RecordActivity extends AppCompatActivity {
             else if(checkedFileName == "crosswalk"){
                 uploadCrossWalkAudio(fileName_crosswalk, checkedFileName);
             }
-
-
-
-
+            else if(checkedFileName == "jaywalking"){
+                uploadJaywalkingAudio(fileName_jaywalking, checkedFileName);
+            }
         }
     }
 
@@ -182,6 +213,29 @@ public class RecordActivity extends AppCompatActivity {
             player=null;
         }
     }
+
+    private void uploadJaywalkingAudio(String sourceFile, String title){
+        File file = new File(sourceFile);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("voiceFile", file.getName(), requestFile);
+        RequestBody descBody = RequestBody.create(MediaType.parse("text/plain"), title);
+
+        Call<Record> call = dataCommAPI.uploadJayWalkingFile(descBody, body);
+        call.enqueue(new Callback<Record>() {
+            @Override
+            public void onResponse(Call<Record> call, Response<Record> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "무단횡단 음성 파일 업로드 성공", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Record> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
 
     private void uploadRoadWayAudio(String sourceFile, String title){
         File file = new File(sourceFile);
@@ -236,6 +290,10 @@ public class RecordActivity extends AppCompatActivity {
         btnStopRecording_crosswalk = findViewById (R.id.recordStop_crosswalk);
         btnPlay_crosswalk = findViewById (R.id.play_crosswalk);
 
+        btnRecord_jaywalking = findViewById(R.id.record_jaywalking);
+        btnStopRecording_jaywalking = findViewById(R.id.recordStop_jaywalking);
+        btnPlay_jaywalking = findViewById(R.id.play_jaywalking);
+
         //위험 권한 부여하기
         int permissionCheck = ContextCompat.checkSelfPermission (this, Manifest.permission.RECORD_AUDIO);
 
@@ -254,6 +312,7 @@ public class RecordActivity extends AppCompatActivity {
         Log.e ("MainActivity", "저장할 파일 명 : " + fileName);
         fileName_roadway =fileName+ "/audiorecordtest_roadway.mp3";
         fileName_crosswalk =fileName+ "/audiorecordtest_crosswalk.mp3";
+        fileName_jaywalking = fileName+ "/audiorecordtest_jaywalking.mp3";
 
         // For Server
         appData = getSharedPreferences("appData", MODE_PRIVATE);

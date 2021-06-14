@@ -23,6 +23,9 @@ public interface RetrofitAPI {
     @GET("/new-route/{smartBadgeID}")
     Call<List<SmartBadge>> getNewRouteData(@Path("smartBadgeID") String id);
 
+    @GET("/jaywalking/{smartBadgeID}")
+    Call<List<SmartBadge>> getJaywalkingData(@Path("smartBadgeID") String id);
+
     @POST("/users/")
     Call<SmartBadge> postSignUp(@Body SmartBadge smartBadge);
 

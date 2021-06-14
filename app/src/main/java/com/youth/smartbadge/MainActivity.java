@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     };
                     mHandler.post(runnable);
-                    PutMarkerOnMap();
                 }
                 else {
                     Log.d("MainTest", "사용자 정보가 없습니다.");
@@ -116,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 //                finish();
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 intent.putExtra("makeState", makeState);
+                shouldStopLoop = true;
                 startActivity(intent);
             }
         });
@@ -258,6 +258,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         mapView = new MapView(this);
+        if (shouldStopLoop){
+            shouldStopLoop = false;
+            mHandler.post(runnable);
+        }
         mapViewContainer.addView(mapView);
         super.onResume();
     }
