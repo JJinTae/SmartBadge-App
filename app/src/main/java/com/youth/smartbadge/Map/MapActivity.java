@@ -1,4 +1,4 @@
-package com.youth.smartbadge;
+package com.youth.smartbadge.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -17,39 +17,29 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
-import com.kakao.sdk.user.UserApiClient;
-import com.kakao.sdk.user.model.AccessTokenInfo;
 import com.youth.smartbadge.Login.LoginActivity;
 import com.youth.smartbadge.Login.RetrofitAPI;
 import com.youth.smartbadge.Login.SmartBadge;
-import com.youth.smartbadge.Map.MapActivity;
-import com.youth.smartbadge.Map.SettingActivity;
-import com.youth.smartbadge.Record.RecordActivity;
+import com.youth.smartbadge.MainActivity;
+import com.youth.smartbadge.R;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-import kotlin.jvm.functions.Function2;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity {
 
     private String BASE_URL = "http://112.158.50.42:9080";
     private SharedPreferences appData;
     private RetrofitAPI retrofitAPI;
-
-    private String userID;
-    private View btnLogout;
-    private Button btnRecord, btnSetting;
 
     private String smartBadgeID;
     private String updated_at;
@@ -60,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean makeState;
     private MapView mapView;
     private MapPoint mapPoint;
+    private Button btnSetting;
     private ViewGroup mapViewContainer;
 
     private boolean shouldStopLoop;
@@ -69,75 +60,34 @@ public class MainActivity extends AppCompatActivity {
     private NotificationCompat.Builder builder;
     private NotificationChannel channel;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_map);
 
         init();
+        PutMarkerOnMap();
 
-        UserApiClient.getInstance().accessTokenInfo(new Function2<AccessTokenInfo, Throwable, Unit>() {
+        shouldStopLoop = false;
+        mHandler = new Handler();
+        runnable = new Runnable() {
             @Override
-            public Unit invoke(AccessTokenInfo accessTokenInfo, Throwable throwable) {
-                if (accessTokenInfo != null){
-                    userID = Long.toString(accessTokenInfo.getId());
-                    Log.d("MainTest", userID + " : login되어 있습니다.");
-                    Log.d("MainTest", Integer.toString(appData.getInt("smartBadgeID", 0)));
-
-                    shouldStopLoop = false;
-                    mHandler = new Handler();
-                    runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            PutMarkerOnMap();
-                            if (!shouldStopLoop) {
-                                mHandler.postDelayed(this, 3000);
-                            }
-                        }
-                    };
-                    mHandler.post(runnable);
+            public void run() {
+                PutMarkerOnMap();
+                if (!shouldStopLoop) {
+                    mHandler.postDelayed(this, 5000);
                 }
-                else {
-                    Log.d("MainTest", "사용자 정보가 없습니다.");
-                    finish();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                }
-                return null;
             }
-        });
+        };
+        mHandler.post(runnable);
 
-        // 안심지역 관리 Activity 이동 버튼
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                finish();
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                finish();
+                Intent intent = new Intent(MapActivity.this, SettingActivity.class);
                 intent.putExtra("makeState", makeState);
-                shouldStopLoop = true;
                 startActivity(intent);
-            }
-        });
-        // 음성녹음 Activity 이동 버튼
-        btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, RecordActivity.class));
-            }
-        });
-        // 카카오톡 로그아웃 버튼
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
-                    @Override
-                    public Unit invoke(Throwable throwable) {
-                        finish();
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        return null;
-                    }
-                });
             }
         });
     }
@@ -217,20 +167,17 @@ public class MainActivity extends AppCompatActivity {
         builder.setContentTitle("어린이 스마트 배지 알림");
         builder.setContentText("어린이가 안심지역을 이탈하였습니다. 알림을 눌러 확인하세요.");
         builder.setAutoCancel(true);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MapActivity.class);
         builder.setContentIntent(PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     public void init(){
         setNotificationManager();
         preSafeState = false;
-        // mapView = new MapView(this);
+        btnSetting = findViewById(R.id.btn_map_safe_zone);
+        mapView = new MapView(this);
         mapViewContainer = (ViewGroup) findViewById(R.id.view_map_main);
-        // mapViewContainer.addView(mapView);
-
-        btnRecord = findViewById(R.id.btn_main_record);
-        btnLogout = findViewById(R.id.btn_main_logout);
-        btnSetting = findViewById(R.id.btn_main_setting);
+        mapViewContainer.addView(mapView);
 
         appData = getSharedPreferences("appData", MODE_PRIVATE);
         smartBadgeID = Integer.toString(appData.getInt("smartBadgeID", 0));
@@ -243,26 +190,28 @@ public class MainActivity extends AppCompatActivity {
         retrofitAPI = retrofit.create(RetrofitAPI.class);
     }
 
+
     @Override
     public void finish(){
         mapViewContainer.removeView(mapView);
         super.finish();
     }
-
-    @Override
-    protected void onPause() {
-        mapViewContainer.removeView(mapView);
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        mapView = new MapView(this);
-        if (shouldStopLoop){
-            shouldStopLoop = false;
-            mHandler.post(runnable);
-        }
-        mapViewContainer.addView(mapView);
-        super.onResume();
-    }
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//        shouldStopLoop = false;
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        shouldStopLoop = true;
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        shouldStopLoop = false;
+//        mHandler.post(runnable);
+//    }
 }
