@@ -35,6 +35,6 @@ public interface RetrofitAPI {
     @DELETE("/gps-route/{smartBadgeID}/")
     Call<Void> deleteGpsRouteData(@Path("smartBadgeID") String id);
 
-    @DELETE("/new-route/{smartBadgeID}")
+    @DELETE("/new-route/{smartBadgeID}/")
     Call<Void> deleteNewRouteData(@Path("smartBadgeID") String id);
 }

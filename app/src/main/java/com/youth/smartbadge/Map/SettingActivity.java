@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.youth.smartbadge.Login.RetrofitAPI;
 import com.youth.smartbadge.Login.SmartBadge;
@@ -65,30 +66,35 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MakeZone();
+                Toast.makeText (getApplicationContext(),"안심 지역을 생성하였습니다.", Toast.LENGTH_SHORT).show ();
             }
         });
         btnDeleteZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DeleteGpsRoute();
+                Toast.makeText (getApplicationContext(),"안심 지역을 삭제하였습니다.", Toast.LENGTH_SHORT).show ();
             }
         });
         btnMakeNewZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MakeNewZone();
+                Toast.makeText (getApplicationContext(),"새로운 안심 지역을 추가하였습니다.", Toast.LENGTH_SHORT).show ();
             }
         });
         btnDeleteNewZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DeleteNewRoute();
+                Toast.makeText (getApplicationContext(),"이탈경로를 삭제하였습니다.", Toast.LENGTH_SHORT).show ();
             }
         });
         btnDrawJaywalking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PutJaywalkingOnMap();
+                Toast.makeText (getApplicationContext(),"무단횡단 기록을 표시하였습니다.", Toast.LENGTH_SHORT).show ();
             }
         });
 
@@ -222,6 +228,7 @@ public class SettingActivity extends AppCompatActivity {
                     Log.d("test", "make New zone success");
                     btnMakeNewZone.setVisibility(View.GONE);
                     btnDeleteNewZone.setVisibility(View.GONE);
+                    btnDeleteZone.setVisibility(View.VISIBLE);
                     DeleteNewRoute();
                     mapView.removePolyline(newRoute);
                     mapView.removePolyline(safeZone);

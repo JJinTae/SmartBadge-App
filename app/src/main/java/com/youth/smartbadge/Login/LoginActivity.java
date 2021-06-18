@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity{
                         }
                     });
                     finish();
+                    Toast.makeText(LoginActivity.this, "회원가입에 성공하였습니다.", Toast.LENGTH_LONG).show();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 } else{
                     Toast.makeText(LoginActivity.this, R.string.failed_start, Toast.LENGTH_SHORT).show();
