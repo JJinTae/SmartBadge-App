@@ -33,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private String BASE_URL = "http://112.158.50.42:9080";
+    private String BASE_URL = "http://127.0.0.1:9080"; // Your Server IP:Port
     private SharedPreferences appData;
     private RetrofitAPI retrofitAPI;
     private String smartBadgeID;
